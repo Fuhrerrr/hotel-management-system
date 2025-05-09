@@ -1,0 +1,357 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta name="author" content="">
+    <meta name="description" content="">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> The Riad</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="images/favicon.png">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mmenu.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" id="colors">
+    <link href="{% static 'css/datedropper.css' %}" rel="stylesheet" type="text/css">
+
+    <!-- Icons, Font and assets -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script> -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">     -->
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon-ligatures@2.5.0/fonts/remixicon.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script> 
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800&display=swap&subset=latin-ext,vietnamese" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700,800" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+    <!-- Preloader Start -->
+    <!-- <div class="preloader">
+        <div class="utf-preloader">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div> -->
+    <!-- Preloader End -->
+
+    <!-- Wrapper -->
+    <div id="main_wrapper">
+        <header id="header_part" class="fullwidth">
+            <div id="header">
+                <div class="container">
+                    <div class="utf_left_side">
+                        <div id="logo"> <a href="/"><img src="{% static 'images/logo.png' %}" alt=""></a> </div>
+                        <div class="mmenu-trigger">
+                            <button class="hamburger utfbutton_collapse" type="button">
+				<span class="utf_inner_button_box">
+					<span class="utf_inner_section"></span>
+				</span>
+			</button>
+                        </div>
+                        <nav id="navigation" class="style_one">
+                            <ul id="responsive">
+                                <li><a class="current" href="{% url 'hotel:index' %}">Home</a></li>
+                                <li><a href="#">Hotels</a>
+                                    <ul>
+                                        <li><a href="#">Luxury</a></li>
+                                        <li><a href="#">Business</a></li>
+                                        <li><a href="#">Classic</a></li>
+                                        <li><a href="#">Economy</a></li>
+                                        
+                                    </ul>
+                                </li>
+                                <li><a href="#">Account</a>
+                                    <ul>
+                                        <li><a href="{% url 'dashboard:dashboard' %}">Dashboard</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">Blog</a></li>
+                                <li><a href="#">Pages</a>
+                                    <ul>
+                                        <li><a href="">About Us</a></li>
+                                        <li><a href="">Contact</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="utf_right_side">
+                        <div class="header_widget"> 
+                            
+                            {% if request.user.is_authenticated %}
+                                <a href="{% url 'hotel:selected_rooms' %}" class="button border sign-in "><i class="fas fa-bed"></i><span class="room-count">{{ total_selected_items }}</span></a> 
+                                <a href="{% url 'dashboard:dashboard' %}" class="button border sign-in "><i class="bi bi-grid"></i> Dashboard</a> 
+                                <a href="{% url 'userauths:sign-out' %}" class="button border with-icon"><i class="bi bi-power"></i> Sign Out</a>
+                            {% else %}
+                                <a href="{% url 'hotel:selected_rooms' %}" class="button border sign-in "><i class="fas fa-bed"></i><span class="room-count">{{ total_selected_items }}</span></a> 
+                                <a href="{% url 'userauths:sign-in' %}" class="button border sign-in "><i class="fa fa-sign-in"></i> Sign In</a> 
+                                <a href="{% url 'userauths:sign-up' %}" class="button border with-icon"><i class="bi bi-person-add"></i> Sign Up</a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div id="dialog_signin_part" class="zoom-anim-dialog mfp-hide">
+                        <div class="small_dialog_header">
+                            <h3>Sign In</h3>
+                        </div>
+                        <div class="utf_signin_form style_one">
+                            <ul class="utf_tabs_nav">
+                                <li class=""><a href="#tab1">Log In</a></li>
+                                <li><a href="#tab2">Register</a></li>
+                            </ul>
+                            <div class="tab_container alt">
+                                <div class="tab_content" id="tab1" style="display:none;">
+                                    <form method="post" class="login">
+                                        <p class="utf_row_form utf_form_wide_block">
+                                            <label for="username">
+                      <input type="text" class="input-text" name="username" id="username" value="" placeholder="Username" />
+                    </label>
+                                        </p>
+                                        <p class="utf_row_form utf_form_wide_block">
+                                            <label for="password">
+                      <input class="input-text" type="password" name="password" id="password" placeholder="Password"/>
+                    </label>
+                                        </p>
+                                        <div class="utf_row_form utf_form_wide_block form_forgot_part"> <span class="lost_password fl_left"> <a href="javascript:void(0);">Forgot Password?</a> </span>
+                                            <div class="checkboxes fl_right">
+                                                <input id="remember-me" type="checkbox" name="check">
+                                                <label for="remember-me">Remember Me</label>
+                                            </div>
+                                        </div>
+                                        <div class="utf_row_form">
+                                            <input type="submit" class="button border margin-top-5" name="login" value="Login" />
+                                        </div>
+                                        <div class="utf-login_with my-3">
+                                            <span class="txt">Or Login in With</span>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-6">
+                                                <a href="javascript:void(0);" class="social_bt facebook_btn mb-0"><i class="fa fa-facebook"></i> Facebook</a>
+                                            </div>
+                                            <div class="col-md-6 col-6">
+                                                <a href="javascript:void(0);" class="social_bt google_btn mb-0"><i class="fa fa-google"></i> Google</a>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="tab_content" id="tab2" style="display:none;">
+                                    <form method="post" class="register">
+                                        <p class="utf_row_form utf_form_wide_block">
+                                            <label for="username2">
+                      <input type="text" class="input-text" name="username" id="username2" value="" placeholder="Username" />
+                    </label>
+                                        </p>
+                                        <p class="utf_row_form utf_form_wide_block">
+                                            <label for="email2">
+                      <input type="text" class="input-text" name="email" id="email2" value="" placeholder="Email" />
+                    </label>
+                                        </p>
+                                        <p class="utf_row_form utf_form_wide_block">
+                                            <label for="password1">
+                      <input class="input-text" type="password" name="password1" id="password1" placeholder="Password" />
+                    </label>
+                                        </p>
+                                        <p class="utf_row_form utf_form_wide_block">
+                                            <label for="password2">
+                      <input class="input-text" type="password" name="password2" id="password2" placeholder="Confirm Password" />
+                    </label>
+                                        </p>
+                                        <input type="submit" class="button border fw margin-top-10" name="register" value="Register" />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="clearfix"></div>
+        
+        {% block content %}
+            
+        {% endblock content %}
+            
+        <div class="clearfix"></div>
+        
+        <!-- Footer -->
+        <div id="footer" class="footer_sticky_part">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12 col-xs-12">
+                        <h4>About Us</h4>
+                        <p>Welcome to EmsiHotel, a fresh and innovative hotel booking platform proudly founded by a young Moroccan entrepreneur. Our mission is simple: to make your travel and accommodation experience smoother, smarter, and more personalized.
+
+                            Born from a passion for hospitality and technology, our startup brings together the warmth of Moroccan culture with the convenience of modern booking solutions. Whether you're planning a getaway, a business trip, or an unforgettable adventure, we’re here to help you find the perfect stay — quickly and hassle-free.
+                            
+                            .</p>
+                    </div>
+                    <div class="col-md-2 col-sm-3 col-xs-6">
+                        <h4>Useful Links</h4>
+                        <ul class="social_footer_link">
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">Listing</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-2 col-sm-3 col-xs-6">
+                        <h4>My Account</h4>
+                        <ul class="social_footer_link">
+                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="#">Profile</a></li>
+                            <li><a href="#">My Listing</a></li>
+                            <li><a href="#">Favorites</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-2 col-sm-3 col-xs-6">
+                        <h4>Pages</h4>
+                        <ul class="social_footer_link">
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Our Partners</a></li>
+                            <li><a href="#">How It Work</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-2 col-sm-3 col-xs-6">
+                        <h4>Help</h4>
+                        <ul class="social_footer_link">
+                            <li><a href="#">Sign In</a></li>
+                            <li><a href="#">Register</a></li>
+                            <li><a href="#">Add Listing</a></li>
+                            <li><a href="#">Pricing</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="footer_copyright_part">Copyright © 2025 All Rights Reserved.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="bottom_backto_top"><a href="#"></a></div>
+    </div>
+
+    <script>
+        {% for message in messages %}
+
+        Swal.fire({
+            icon: '{{message.tags}}',
+            title: '{{message}}',
+            text: '{{message.tags}}',
+            timer: 1500
+        })
+        {% endfor %}
+    </script>
+
+    <script src="http://maps.google.com/maps/api/js?sensor=false&amp;language=en"></script> 
+
+
+    <!-- Scripts -->
+    <script src="{% static 'scripts/custom.js' %}"></script>
+    <script src="{% static 'scripts/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'scripts/chosen.min.js' %}"></script>
+    <script src="{% static 'scripts/slick.min.js' %}"></script>
+    <script src="{% static 'scripts/rangeslider.min.js' %}"></script>
+    <script src="{% static 'scripts/magnific-popup.min.js' %}"></script>
+    <script src="{% static 'scripts/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'scripts/bootstrap-select.min.js' %}"></script>
+    <script src="{% static 'scripts/mmenu.js' %}"></script>
+    <script src="{% static 'scripts/tooltips.min.js' %}"></script>
+    <script src="{% static 'scripts/color_switcher.js' %}"></script>
+    <script src="{% static 'scripts/jquery_custom.js' %}"></script>
+    <script src="{% static 'scripts/typed.js' %}"></script>
+    <script src="{% static 'scripts/infobox.min.js' %}"></script> 
+    <script src="{% static 'scripts/markerclusterer.js' %}"></script> 
+    <script src="{% static 'scripts/maps.js' %}"></script>
+    <script src="{% static 'scripts/datedropper.js' %}"></script> 
+    <script src="{% static 'scripts/quantityButtons.js' %}"></script>
+    <script src="{% static 'scripts/moment.min.js' %}"></script>
+    <script src="{% static 'scripts/daterangepicker.js' %}"></script>
+    <script src="{% static 'scripts/moment.min.js' %}"></script>
+    <script src="{% static 'scripts/daterangepicker.js' %}"></script>
+    
+    
+    
+    <script>
+        function initAutocomplete() {
+            var input = document.getElementById('autocomplete-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+
+            autocomplete.addListener('place_changed', function() {
+                var place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    window.alert("No details available for input: '" + place.name + "'");
+                    return;
+                }
+            });
+
+            if ($('.main-search-input-item')[0]) {
+                setTimeout(function() {
+                    $(".pac-container").prependTo("#autocomplete-container");
+                }, 300);
+            }
+        }
+    </script>
+    <script>
+        $(function() {
+
+            var start = moment().subtract(0, 'days');
+            var end = moment().add(2, 'days');
+
+            function cb(start, end) {
+                $('#booking-date-search').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+            cb(start, end);
+            $('#booking-date-search').daterangepicker({
+                "opens": "right",
+                "autoUpdateInput": true,
+                "alwaysShowCalendars": true,
+                startDate: start,
+                endDate: end
+            }, cb);
+
+            cb(start, end);
+
+        });
+
+        // Calendar animation and visual settings
+        $('#booking-date-search').on('show.daterangepicker', function(ev, picker) {
+            $('.daterangepicker').addClass('calendar-visible calendar-animated bordered-style');
+            $('.daterangepicker').removeClass('calendar-hidden');
+        });
+        $('#booking-date-search').on('hide.daterangepicker', function(ev, picker) {
+            $('.daterangepicker').removeClass('calendar-visible');
+            $('.daterangepicker').addClass('calendar-hidden');
+        });
+
+        $(window).on('load', function() {
+            $('#booking-date-search').val('');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+  
+  <div id="titlebar" class="gradient">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Select Booking Data</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <section class="fullwidth_block margin-top-0 padding-top-0 padding-bottom-50" data-background-color="#fff"> 
+    <div class="container">
+      
+      <div class="row d-flex justify-content-center" style="display: flex; justify-content: center;">  
+        <div class="col-lg-6">
+            <div class=" booking_widget_box" style="border: 1px dashed rgba(42, 1, 119, 0.61); padding: 14px; border-radius: 10px;">
+              <h3><i class="fa fa-calendar"></i> Booking</h3>
+              <form class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}">
+                {% csrf_token %}
+                <input type="hidden" value="{{hotel.id}}" name="hotel-id" id="">
+                <div class="col-lg-12 col-md-12 select_date_box">
+                    <label for="">Check-in Date</label>
+                    <input type="date" id="date-picker" name="checkin" placeholder="Select Date">
+                </div>
+                <div class="col-lg-12 col-md-12 select_date_box">
+                    <label for="">Check-out Date</label>
+                    <input type="date" name="checkout" id="date-picker" placeholder="Select Date">
+                </div>
+                <div class="with-forms">
+                    <div class="col-lg-12 col-md-12">
+                        <a href="#">Guests <span class="qtyTotal" name="qtyTotal">1</span></a>
+                        <div class="panel-dropdown-content">
+                            <div class="qtyButtons">
+                                <div class="qtyTitle">Adults</div>
+                                <input type="text" name="adult" value="1">
+                            </div>
+                            <div class="qtyButtons">
+                                <div class="qtyTitle">Childrens</div>
+                                <input type="text" name="children" value="1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="with-forms margin-top-30">
+                    <div class="col-lg-12 col-md-12 ">
+                        <a href="#">Select Room Type</a>
+                        <select name="room-type" class="utf_chosen_select_single" required>
+                            <option value="">Select Room</option>
+                            {% for r in hotel.hotel_room_types %}
+                                <option value="{{r.slug}}">{{r.type}}</option>
+                            {% endfor %}
+                          </select>
+                    </div>
+                </div>
+               
+                <button type="submit" class="utf_progress_button button fullwidth_block margin-top-5">Check Availability</button>
+            </form>
+              <button class="like-button add_to_wishlist"><span class="like-icon"></span> Add to Wishlist</button>
+              <div class="clearfix"></div>
+            </div>
+        </div>      
+      </div>      
+    </div>    
+  </section>
+
+
+  
+{% endblock content %}

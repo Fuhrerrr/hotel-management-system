@@ -1,0 +1,224 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet" />
+
+        <style>
+            body {
+                background: #eee;
+                margin-top: 20px;
+            }
+            .text-danger strong {
+                color: #18389f;
+            }
+            .receipt-main {
+                background: #ffffff none repeat scroll 0 0;
+                border-bottom: 12px solid #333333;
+                border-top: 12px solid #18389f;
+                margin-top: 50px;
+                margin-bottom: 50px;
+                padding: 40px 30px !important;
+                position: relative;
+                box-shadow: 0 1px 21px #acacac;
+                color: #333333;
+                font-family: open sans;
+            }
+            .receipt-main p {
+                color: #333333;
+                font-family: open sans;
+                line-height: 1.42857;
+            }
+            .receipt-footer h1 {
+                font-size: 15px;
+                font-weight: 400 !important;
+                margin: 0 !important;
+            }
+            .receipt-main::after {
+                background: #414143 none repeat scroll 0 0;
+                content: "";
+                height: 5px;
+                left: 0;
+                position: absolute;
+                right: 0;
+                top: -13px;
+            }
+            .receipt-main thead {
+                background: #414143 none repeat scroll 0 0;
+            }
+            .receipt-main thead th {
+                color: #fff;
+            }
+            .receipt-right h5 {
+                font-size: 16px;
+                font-weight: bold;
+                margin: 0 0 7px 0;
+            }
+            .receipt-right p {
+                font-size: 12px;
+                margin: 0px;
+            }
+            .receipt-right p i {
+                text-align: center;
+                width: 18px;
+            }
+            .receipt-main td {
+                padding: 9px 20px !important;
+            }
+            .receipt-main th {
+                padding: 13px 20px !important;
+            }
+            .receipt-main td {
+                font-size: 13px;
+                font-weight: initial !important;
+            }
+            .receipt-main td p:last-child {
+                margin: 0;
+                padding: 0;
+            }
+            .receipt-main td h2 {
+                font-size: 20px;
+                font-weight: 900;
+                margin: 0;
+                text-transform: uppercase;
+            }
+            .receipt-header-mid .receipt-left h1 {
+                font-weight: 100;
+                margin: 34px 0 0;
+                text-align: right;
+                text-transform: uppercase;
+            }
+            .receipt-header-mid {
+                margin: 24px 0;
+                overflow: hidden;
+            }
+
+            #container {
+                background-color: #dcdcdc;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="row d-flex justify-content-center p-2">
+            <div class="receipt-main col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
+                <div class="d-flex justify-content-between">
+                    <div class="row">
+                        <div class="receipt-header">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="receipt-left">
+                                    <img class="img-responsive" alt="iamgurdeeposahan" src="https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg" style="width: 71px; border-radius: 43px;" />
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 text-left">
+                                <div class="receipt-right">
+                                    <h5 class="margin-top-10">Desphixs<span class="text-warning">.</span></h5>
+                                    <p><i class="fa fa-phone"></i> +1 3649-6589</p>
+                                    <p><i class="fa fa-envelope"></i> company@gmail.com</p>
+                                    <p><i class="fa fa-location-arrow"></i> 123 Main Street</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="receipt-header receipt-header-mid">
+                            <div class="col-xs-12 col-sm-12 col-md-12 text-left">
+                                <div class="receipt-right">
+                                    <h5>Customer Details</h5>
+                                    <p>
+                                        <b><i class="fa fa-user"></i> </b> {{booking.full_name}}
+                                    </p>
+                                    <p>
+                                        <b><i class="fa fa-envelope"></i> </b> {{booking.email}}
+                                    </p>
+                                    <p>
+                                        <b><i class="fa fa-phone"></i> </b> {{booking.phone}}
+                                    </p>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="receipt-left">
+                                    <h6>INVOICE ID #{{booking.booking_id}}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Room Name</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            {% for r in room %}
+                                <tr>
+                                    <td class="col-md-">{{r.room_type.type}}</td>
+                                    <td class="col-md-3"><i class="fa fa-inr"></i> ${{r.room_type.price}}</td>
+                                </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 d-flex justify-content-start">
+                            <div class="receipt-right">
+                                <h5>Hotel Details</h5>
+                                <p class="mb-2"><b>Name: </b>{{booking.hotel.name}}</p>
+                                <p class="mb-2"><b>Address: </b>{{booking.hotel.address}}</p>
+                                <p class="mb-2"><b>Rating: </b> 5 Star</p>
+                                <hr />
+                                <p class="mb-2"><b>Email: </b> {{booking.hotel.email}}</p>
+                                <p class="mb-2"><b>Mobile: </b> {{booking.hotel.mobile}}</p>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 d-flex justify-content-end">
+                            <div class="receipt-right">
+                                <h5>Summary</h5>
+                                <p class="mb-2"><b>Checkin: </b>{{booking.check_in_date}}</p>
+                                <p class="mb-2"><b>Checkout: </b>{{booking.check_out_date}}</p>
+                                <p class="mb-2"><b>Total Days: </b> {{booking.total_days}} Days</p>
+                                <p class="mb-2"><b>Adults: </b> {{booking.num_adults}} Adult</p>
+                                <p class="mb-2"><b>Chilren: </b> {{booking.num_children}} Children</p>
+                                <p class="mb-2"><b>VAT: </b> $0.00</p>
+                                
+                                {% if booking.saved != 0.00 %}
+                                    <p class="mb-2 text-danger"><b>Discount: </b> -${{booking.saved}}</p>
+                                {% endif %}
+                                <hr />
+
+                                <p class="mb-2 text-success"><b>Total: </b> ${{booking.total|floatformat:2}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="d-flex justify-content-center align-items-center">
+                    <button id="printButton" class="btn btn-dark">Print <i class="fas fa-print"></i></button>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+        <!-- Print Windows -->
+        <script>
+            // Function to trigger the print dialog
+            function printPage() {
+                window.print();
+            }
+
+            // Call the printPage function when a button is clicked, for example
+            document.getElementById("printButton").addEventListener("click", printPage);
+        </script>
+    </body>
+</html>

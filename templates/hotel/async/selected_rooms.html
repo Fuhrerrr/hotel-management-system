@@ -1,0 +1,152 @@
+
+{% load static %}
+  
+<div id="main_wrapper" class="selection-list">
+  
+  <div id="titlebar" class="gradient">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>All Room Selections</h2>
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a>Home</a></li>
+              <li><a>Hotel</a></li>
+              <li><a>Rooms</a></li>
+              <li>My selected rooms</li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <form method="POST" class="container margin-bottom-75">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-lg-8 col-md-8 utf_listing_payment_section">
+	    
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+            <h3><i class="fas fa-bed"></i> Selected Rooms</h3>
+            <div class="utf_listing_section">
+                    <div class="utf_pricing_list_section">
+                        <ul>
+                            {% for id, item in data.items %}
+                                <li>
+                                    <h5>Room: {{item.room_name}}  <small><a style="cursor: pointer;" class="delete-item" data-item="{{ id }}"><i class="fas fa-trash" style="color: red;"></i></a></small> </h5>
+                                    <p><strong>Beds :</strong> {{item.number_of_beds}}  </p>
+                                    <span>${{item.room_price}} </span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+            </div>
+        </div>
+
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+          <h3><i class="fas fa-check-circle"></i> Update Selection</h3>
+          <div class="utf_listing_section">
+                  <div class="utf_pricing_list_section">
+                    <form class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}">
+                      {% csrf_token %}
+                      <input type="hidden" value="{{hotel.id}}" name="hotel-id" id="">
+                      <div class="col-lg-12 col-md-12 select_date_box">
+                          <label for="">Check-in Date</label>
+                          <input type="date" id="date-picker" value="{{checkin}}" name="checkin" placeholder="Select Date">
+                      </div>
+                      <div class="col-lg-12 col-md-12 select_date_box">
+                          <label for="">Check-out Date</label>
+                          <input type="date" name="checkout" value="{{checkout}}" id="date-picker" placeholder="Select Date">
+                      </div>
+                      <div class="with-forms">
+                          <div class="col-lg-12 col-md-12">
+                              <a href="#">Guests <span class="qtyTotal" style="visibility: hidden;" name="qtyTotal"></span></a>
+                              <div class="panel-dropdown-content">
+                                  <div class="qtyButtons">
+                                      <div class="qtyTitle">Adults</div>
+                                      <input type="text" name="adult" {% if adult == None %}value="1"{% else %}value="{{adult}}"{% endif %}>
+                                  </div>
+                                  <div class="qtyButtons">
+                                      <div class="qtyTitle">Childrens</div>
+                                      <input type="text" name="children" {% if children == None %}value="1"{% else %}value="{{children}}"{% endif %}>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <a style="margin-top: 50px;">Select Room Type (*required) </a>
+                      <select name="room-type">
+                          <option value="">Select Room</option>
+                          
+                          {% for r in hotel.hotel_room_types %}
+                              <option value="{{r.slug}}">{{r.type}}</option>
+                          {% endfor %}
+                      </select>
+                    
+                      <button type="submit" class="utf_progress_button button fullwidth_block margin-top-5"> <i class="fas fa-check-circle"></i> Update Selection </button>
+                  </form>
+                  </div>
+          </div>
+      </div>
+            
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+		  <h3><i class="fas fa-user"></i> Billing Information</h3>
+			<div class="row">
+			  <div class="col-md-12">
+				<label>First Name</label>
+				<input name="full_name" type="text" value="" placeholder="First Name">
+			  </div>
+			  <div class="col-md-6">
+				<div class="medium-icons">
+				  <label>E-Mail</label>
+				  <input name="email" type="text" value="" placeholder="Email">
+				</div>
+			  </div>
+			  <div class="col-md-6">
+				<div class="medium-icons">
+				  <label>Phone</label>
+				  <input name="phone" type="text" value="" placeholder="Phone">
+				</div>
+			  </div>
+        <div class="col-lg-12">
+          <button type="submit" class="button utf_booking_confirmation_button margin-top-20 margin-bottom-10">Continue to checkout <i class="fas fa-right-arrow"></i></button> 		
+        </div>
+			</div>
+		</div>
+
+		
+	  </div>
+      <div class="col-lg-4 col-md-4 margin-top-0 utf_listing_payment_section">
+        <div class="utf_booking_listing_item_container compact utf_order_summary_widget_section">
+          <div class="listing-item"> <img src="{{hotel.image.url}}" alt="">
+            <div class="utf_listing_item_content">              
+              <h3>{{hotel.name}}</h3>
+              <span><i class="fa fa-map-marker"></i> The Ritz-Carlton, Hong Kong</span>
+						<span><i class="fa fa-phone"></i> (+15) 124-796-3633</span>											
+			  <div class="utf_star_rating_section" data-rating="4.5">
+				<div class="utf_counter_star_rating">(18) Reviews</div>
+			  </div>
+			</div>
+          </div>
+        </div>
+        <div class="boxed-widget opening-hours summary margin-top-0">
+          <h3><i class="fa fa-calendar-check-o"></i> Booking Summary</h3>
+          <ul>
+            <li>Check-in <span>{{checkin}}</span></li>
+            <li>Check-out <span>{{checkout}}</span></li>            
+            <li>Total Days <span>{{total_days}} Days</span></li>            
+            <li>Adults <span>{{ adult }} Adult</span></li>
+            <li>Children <span>{{ children }} Children</span></li>
+			      <li>V.A.T <span>$0.00</span></li>
+            <li class="total-costs">Total Cost <span>${{total}}</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </form>
+  
+</div>
+
+  
+
+

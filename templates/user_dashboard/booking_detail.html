@@ -1,0 +1,159 @@
+
+{% extends 'partials/dashboard_base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Dashboard -->
+    <div id="dashboard">
+        <a href="#" class="utf_dashboard_nav_responsive"><i class="fa fa-reorder"></i> Dashboard Sidebar Menu</a>
+        {% include 'partials/dashboard_sidebar.html' %}
+        <div class="utf_dashboard_content">
+            
+           
+            <div class="row"> 
+                <div class="col-lg-6 col-md-12">
+                  <div class="utf_dashboard_list_box margin-top-0">
+                    <h4>Booking ID: {{ booking.booking_id }}</h4>
+                    <ul>
+                      <li class="utf_approved_booking_listing">
+                        <div class="utf_list_box_listing_item bookings">
+                          <div class="utf_list_box_listing_item_content">
+                            <div class="inner">
+                              <h3>{{booking.full_name|title}} <span class="utf_booking_listing_status">{{booking.payment_status|title}}</span></h3>
+                              <div class="utf_inner_booking_listing_list">
+                                <h5>Hotel Name:</h5>
+                                <ul class="utf_booking_listing_list">
+                                  <li>{{booking.hotel.name}}</li>						  						  
+                                </ul>
+                              </div>
+                              <div class="utf_inner_booking_listing_list">
+                                <h5>Hotel Address:</h5>
+                                <ul class="utf_booking_listing_list">
+                                  <li><small>{{booking.hotel.address}}</small></li>						  						  
+                                </ul>
+                              </div>
+                              <div class="utf_inner_booking_listing_list">
+                                <h5>Hotel Email:</h5>
+                                <ul class="utf_booking_listing_list">
+                                  <li>{{booking.hotel.email}}</li>						  						  
+                                </ul>
+                              </div>
+                              <div class="utf_inner_booking_listing_list">
+                                <h5>Hotel Phone:</h5>
+                                <ul class="utf_booking_listing_list">
+                                  <li>{{booking.hotel.mobile}}</li>						  						  
+                                </ul>
+                              </div>
+                              <hr>
+                              <div class="utf_inner_booking_listing_list">
+                                <h5>Checkin Date:</h5>
+                                <ul class="utf_booking_listing_list">
+                                  <li class="highlighted">{{booking.check_in_date}}</li>
+                                </ul>
+                              </div>
+                              <div class="utf_inner_booking_listing_list">
+                                <h5>Checkout Date:</h5>
+                                <ul class="utf_booking_listing_list">
+                                  <li class="highlighted">{{booking.check_out_date}}</li>
+                                </ul>
+                              </div>
+                              <div class="utf_inner_booking_listing_list">
+                                <h5>Total Days:</h5>
+                                <ul class="utf_booking_listing_list">
+                                  <li class="highlighted">{{ booking.total_days }} Days</li>
+                                </ul>
+                              </div>
+                              <div class="utf_inner_booking_listing_list">
+                                <h5>Adults:</h5>
+                                <ul class="utf_booking_listing_list">
+                                  <li class="highlighted">{{ booking.num_adults }} Adults</li>
+                                </ul>
+                              </div>
+                              <div class="utf_inner_booking_listing_list">
+                                <h5>Children:</h5>
+                                <ul class="utf_booking_listing_list">
+                                  <li class="highlighted">{{ booking.num_children }} Adults</li>
+                                </ul>
+                              </div>
+                              <hr>
+                              <div class="utf_inner_booking_listing_list">
+                                <h5>Full Name:</h5>
+                                <ul class="utf_booking_listing_list">
+                                  <li class="highlighted">{{booking.full_name|title}}</li>
+                                </ul>
+                              </div>
+                              <div class="utf_inner_booking_listing_list">
+                                <h5>Email Address:</h5>
+                                <ul class="utf_booking_listing_list">
+                                  <li class="highlighted">{{booking.email}}</li>
+                                </ul>
+                              </div>
+                              <div class="utf_inner_booking_listing_list">
+                                <h5>Phone Number:</h5>
+                                <ul class="utf_booking_listing_list">
+                                  <li class="highlighted">{{booking.phone}}</li>
+                                </ul>
+                              </div>
+                              <hr>
+                              <div class="utf_inner_booking_listing_list">
+                                <h5>Price:</h5>
+                                <ul class="utf_booking_listing_list">
+                                  <li class="highlighted">${{booking.total|floatformat:2}}</li>
+                                </ul>
+                              </div>
+                              <hr>
+                              <div class="utf_inner_booking_listing_list">
+                                <h5>Date Booked:</h5>
+                                <ul class="utf_booking_listing_list">
+                                  <li class="highlighted">{{booking.date}}</li>
+                                </ul>
+                              </div>				  					  
+                            </div>
+                          </div>
+                        </div>
+                        <div class="buttons-to-right "> <a href="#" class="button gray reject"><i class="fas fa-receipt "></i> View Invoice</a> </div>
+                        <div class="buttons-to-right margin-top-10"> <a href="#" class="button gray reject"><i class="fas fa-ban"></i> Cancel Booking</a> </div>
+                      </li>
+                      
+                    </ul>
+                  </div>		  
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="utf_dashboard_list_box margin-top-0">
+                      <h4>Booked Rooms ({{ booking.room.all.count }})</h4>
+                      <ul>
+                        
+                        {% for r in booking.room.all %}
+                            
+                            
+                        <li class="utf_approved_booking_listing">
+                          <div class="utf_list_box_listing_item bookings">
+                            <div class="utf_list_box_listing_item_content">
+                              <div class="inner">
+                                <h3>{{r.room_type.type}} Room </h3>
+                                <div class="utf_inner_booking_listing_list">
+                                  <h5>Room Number:</h5>
+                                  <ul class="utf_booking_listing_list">
+                                    <li>{{r.room_number}}</li>						  						  
+                                  </ul>
+                                </div>
+                                
+                                <div class="utf_inner_booking_listing_list">
+                                  <h5>Room Price:</h5>
+                                  <ul class="utf_booking_listing_list">
+                                    <li class="highlighted">${{r.room_type.price|floatformat:2}}</li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        {% endfor %}
+                        
+                      </ul>
+                    </div>		  
+                  </div>
+              </div>
+        </div>
+    </div>
+{% endblock content %}

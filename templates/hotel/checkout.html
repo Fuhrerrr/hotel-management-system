@@ -1,0 +1,217 @@
+
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+  
+<div id="main_wrapper">
+  
+  <div id="titlebar" class="gradient">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>All Room Selections</h2>
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a>Home</a></li>
+              <li><a>Hotel</a></li>
+              <li><a>Rooms</a></li>
+              <li>My selected rooms</li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container margin-bottom-75">
+    <div class="row">
+      <div class="col-lg-8 col-md-8 utf_listing_payment_section">
+	    <div class="notification warning closeable">
+			<p><span>NOTE!</span> Review your order before payment.</p>
+			<a class="close" href="#"></a> 
+		  </div>
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+            <h3><i class="fas fa-bed"></i> Selected Rooms</h3>
+            <div class="utf_listing_section">
+                    <div class="utf_pricing_list_section">
+                        <ul>
+                            {% for r in booking.room.all %}
+                                <li>
+                                    <h5>Room: {{r.room_type.type}} </h5>
+                                    <p><strong>Beds :</strong> {{r.number_of_beds}}  </p>
+                                    <span>${{r.room_type.price}} </span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+            </div>
+        </div>
+            
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+		  <h3><i class="fas fa-user"></i> Billing Information</h3>
+			<div class="row">
+			  <div class="col-md-12">
+				<label>First Name</label>
+				<input name="full_name" type="text" value="{{booking.full_name}}" readonly placeholder="First Name">
+			  </div>
+			  <div class="col-md-6">
+				<div class="medium-icons">
+				  <label>E-Mail</label>
+				  <input name="email" id="email" type="text" value="{{booking.email}}" readonly placeholder="Email">
+				</div>
+			  </div>
+			  <div class="col-md-6">
+				<div class="medium-icons">
+				  <label>Phone</label>
+				  <input name="phone" type="text" value="{{booking.phone}}" readonly >
+				</div>
+			  </div>
+              <div class="col-lg-12">
+			  </div>
+			</div>
+		</div>
+
+		
+	  </div>
+      <div class="col-lg-4 col-md-4 margin-top-0 utf_listing_payment_section">
+        <div class="utf_booking_listing_item_container compact utf_order_summary_widget_section">
+          <div class="listing-item"> <img src="{{booking.hotel.image.url}}" alt="">
+            <div class="utf_listing_item_content">              
+              <h3>{{booking.hotel.name}}</h3>
+              <span><i class="fa fa-map-marker"></i> The Ritz-Carlton, Hong Kong</span>
+						<span><i class="fa fa-phone"></i> (+15) 124-796-3633</span>											
+			  <div class="utf_star_rating_section" data-rating="4.5">
+				<div class="utf_counter_star_rating">(18) Reviews</div>
+			  </div>
+			</div>
+          </div>
+        </div>
+        <div class="boxed-widget opening-hours summary margin-top-0">
+          <h3><i class="fa fa-calendar-check-o"></i> Booking Summary</h3>
+          <ul>
+            <li>Check-in <span>{{booking.check_in_date}}</span></li>
+			      <li>Check-out <span>{{booking.check_out_date}}</span></li>            
+            <li>Adults <span>{{ booking.num_adults }} Adults</span></li>
+            <li>Children <span>{{ booking.num_children }} Children</span></li>
+			      <li>V.A.T <span>$0.00</span></li>
+            
+            {% if booking.saved != 0.00 %}
+			      <li>Discount<span>-${{booking.saved}}</span></li>
+            {% endif %}
+
+            <li class="total-costs">
+              <form action="" method="POST">
+                {% csrf_token %}
+                <div class="col-md-8">
+                  <input id="couponCode" name="code" placeholder="Have a coupon enter here..." required="" type="text">
+                </div>
+                <div class="col-md-4">
+                  <input type="submit" class="coupon_code" value="Apply">	
+                </div>
+              </form>
+              <div class="clearfix"></div>
+            </li>
+            <li class="total-costs">Total Cost <span>${{booking.total}}</span></li>
+          </ul>
+          <form method="POST" action="https://checkout.flutterwave.com/v3/hosted/pay">
+               <input type="hidden" name="public_key" value="FLWPUBK_TEST-a2c377d3cf56b37b9e660f85e26d2f8f-X" />
+               <input type="hidden" name="customer[email]" value="{{booking.email}}" />
+               <input type="hidden" name="customer[name]" value="{{booking.full_name}}" />
+               <input type="hidden" name="tx_ref" value="ID-{{booking.booking_id}}" />
+               <input type="hidden" name="amount" value="{{booking.total}}" />
+               <input type="hidden" name="currency" value="USD" />
+               <input type="hidden" name="meta[token]" value="54" />
+               <input type="hidden" name="redirect_url" value="{{website_address}}/success/{{booking.booking_id}}/?success_id={{booking.success_id}}&booking_total={{booking.total}}" />
+               
+               <button id="flutter-btn" class="button utf_booking_confirmation_button margin-top-20 w-100 " style="background-color: orange; color: rgb(37, 28, 3);">Pay with Flutterwave <img src="https://asset.brandfetch.io/iddYbQIdlK/idmlgmHt_3.png" style="width: 40px;" alt=""></button> 		
+          </form>
+          <button id="checkout-button" class="button utf_booking_confirmation_button margin-top-10 margin-bottom-10 w-100">Pay with Stripe <i class="fas fa-credit-card"></i></button> 		
+          <div id="paypal-button-container"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+
+<script type="text/javascript">
+
+
+
+    // Create an instance of the Stripe object with your publishable API key
+    var stripe = Stripe('{{ stripe_publishable_key }}');
+    var checkoutButton = document.getElementById('checkout-button');
+
+    checkoutButton.addEventListener('click', function () {
+
+        var email = document.getElementById('email').value;
+        if (email.length == 0) {
+            alert("Please enter your email address.");
+            return;
+        }
+
+        checkoutButton.innerHTML = "Starting..."
+        
+        fetch("{% url 'hotel:api_checkout_session' booking_id=booking.booking_id %}", {
+            method: 'POST',
+            body: JSON.stringify(
+                { email: email }
+            )
+        }).then(function (response) {
+                return response.json();
+            })
+            .then(function (session) {
+                return stripe.redirectToCheckout({ sessionId: session.sessionId });
+            })
+            .then(function (result) {
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            })
+            .catch(function (error) {
+                console.error('Error:', error);
+            });
+    });
+</script>
+
+
+<script>
+   booking_id = "{{booking.booking_id}}"
+   booking_total = "{{booking.total}}"
+   success_id = "{{booking.success_id}}"
+   id = "{{booking.id}}"
+
+   paypal.Buttons({
+
+      createOrder: function(data, actions) {
+         return actions.order.create({
+            purchase_units: [{
+               amount: {
+                  value: booking_total
+               }
+            }]
+         })
+      },
+
+       onApprove: function(data, actions) {
+           return actions.order.capture().then(function(Details){
+              window.location.href = "/success/"+ booking_id +"/?PayerID="+ id +"&success_id=" + success_id + "&booking_total=" + booking_total + "/" ; 
+           })
+       }
+
+   }).render('#paypal-button-container');
+</script>
+
+<script>
+  let flutter_btn = document.getElementById("flutter-btn")
+  flutter_btn.addEventListener("click", function(){
+    flutter_btn.innerHTML = "Starting..."
+  })
+</script>
+  
+{% endblock content %}
+
+

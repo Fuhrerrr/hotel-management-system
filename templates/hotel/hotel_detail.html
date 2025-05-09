@@ -1,0 +1,477 @@
+
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+        <div class="clearfix"></div>
+        <div id="utf_listing_gallery_part" class="utf_listing_section">
+            <div class="utf_listing_slider utf_gallery_container margin-bottom-0">
+                
+                {% for h in hotel.hotel_gallery %}
+                <a href="{{h.image.url}}" data-background-image="{{h.image.url}}" class="item utf_gallery"></a>
+                {% endfor %}
+
+            </div>
+        </div>
+        <div class="container">
+            <div class="row utf_sticky_main_wrapper">
+                <div class="col-lg-8 col-md-8">
+                    <div id="titlebar" class="utf_listing_titlebar">
+                        <div class="utf_listing_titlebar_title">
+                            <h2>
+                                {{hotel.name}} 
+                                <!-- <span class="listing-tag">Music Fair</span> -->
+                            </h2>
+                            <span> <a href="#utf_listing_location" class="listing-address"> <i class="fas fa-location-arrow"></i> {{hotel.address}}  </a> </span>
+                            <span class="call_now"><i class="fas fa-phone"></i> {{hotel.mobile}} </span>
+                            <div class="utf_star_rating_section" data-rating="{{hotel.average_rating}}">
+                                {% if hotel.average_rating == None %}
+                                    <div class="utf_counter_star_rating">No Reviews Yet</div>
+                                {% else %}
+                                    <div class="utf_counter_star_rating">({{hotel.average_rating}}) / ({{hotel.rating_count}} Reviews) </div>
+                                {% endif %}
+                                    
+                            </div>
+                            <ul class="listing_item_social">
+                                
+                                {% if bookmark %}
+                                    <li><a style="cursor: pointer;" data-hotel="{{hotel.id}}" class="add-to-bookmark-{{hotel.id}}" id="add-to-bookmark"><i class="fa fa-heart" style="color: red;"></i></a></li>
+                                {% else %}
+                                    <li><a style="cursor: pointer;" data-hotel="{{hotel.id}}" class="add-to-bookmark-{{hotel.id}}" id="add-to-bookmark"><i class="fa fa-heart" style="color: gray;"></i></a></li>
+                                {% endif %}
+
+                                {% if request.user.is_authenticated %}
+                                
+                                    {% if not reviews %}
+                                        <a href="#small-dialog" class=" popup-with-zoom-anim" id="add-review-button"><i class="fa fa-star"> </i>Add Review</a></li>
+                                        <div id="small-dialog" class="zoom-anim-dialog mfp-hide">
+                                            <div class="small_dialog_header">
+                                            <h3 class="review_text">Write a review</h3>
+                                            </div>
+                                            <div class="utf_message_reply_block margin-top-0" id="review_div">
+                                            <textarea cols="40" rows="3" id="review-input" placeholder="Your Message..."></textarea>
+                                            <select name="" id="rating-input">
+                                                <option value="1">★☆☆☆☆</option>
+                                                <option value="2">★★☆☆☆</option>
+                                                <option value="3">★★★☆☆</option>
+                                                <option value="4">★★★★☆</option>
+                                                <option value="5">★★★★★</option>
+                                            </select>
+                                            <button data-hotel="{{hotel.id}}" class="button" id="review-btn">Reply Message</button>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <li><a href="{% url 'userauths:sign-in' %}?next={{request.path}}"><i class="fa fa-sign-in"></i> Login to Write Review</a></li>
+                                {% endif %}
+                                <li><a style="cursor: pointer;" id="clipboard"><i class="fa fa-share"></i> Share</a></li>
+                                <script>
+                                    var $temp = $("<input>");
+                                    var $url = $(location).attr('href');
+                                  
+                                    $('#clipboard').on('click', function() {
+                                      $("body").append($temp);
+                                      $temp.val($url).select();
+                                      document.execCommand("copy");
+                                      $temp.remove();
+                                      $("#clipboard").html("URL copied <i class='fas fa-check-circle'></i>");
+                                    })
+                                  </script>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="utf_listing_overview" class="utf_listing_section">
+                        <h3 class="utf_listing_headline_part margin-top-30 margin-bottom-30">Description</h3>
+                        <p>{{hotel.description|safe}} </p>
+                        <div id="utf_listing_tags" class="utf_listing_section listing_tags_section margin-bottom-10 margin-top-0">
+                            <a href="#"><i class="fas fa-phone" aria-hidden="true"></i> {{hotel.mobile}} </a>
+                            <a href="#"><i class="fa fa-envelope-o" aria-hidden="true"></i> {{hotel.email}} </a>
+                            <!-- <a href="#"><i class="sl sl-icon-globe" aria-hidden="true"></i> www.example.com</a> -->
+                        </div>
+                        <div class="social-contact">
+                            <a href="#" class="facebook-link"><i class="fab fa-facebook"></i> Facebook</a>
+                            <a href="#" class="twitter-link"><i class="fab fa-twitter"></i> Twitter</a>
+                            <a href="#" class="instagram-link"><i class="fab fa-instagram"></i> Instagram</a>
+                            <a href="#" class="linkedin-link"><i class="fab fa-linkedin"></i> Linkedin</a>
+                            <a href="#" class="youtube-link"><i class="fab fa-youtube-play"></i> Youtube</a>
+                        </div>
+                    </div>
+
+                    <div id="utf_listing_tags" class="utf_listing_section listing_tags_section">
+                        <h3 class="utf_listing_headline_part margin-top-40 margin-bottom-40">Tags</h3>
+                        
+                        {% for h in hotel.tags.all %}
+                        <a href="#"><i class="fa fa-tag" aria-hidden="true"></i>{{h}}</a>
+                        {% endfor %}
+                            
+                        
+                    </div>
+
+                    <div class="utf_listing_section">
+                        <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">Pricing</h3>
+                        <div class="show-more">
+                            <div class="utf_pricing_list_section">
+                                <h4>Room Types</h4>
+                                <ul>
+                                    
+                                    {% for r in hotel.hotel_room_types %}
+                                        <li>
+                                            <h5>
+                                                {{r.type}} {{r.rid}} 
+                                                <!-- <sub class="ppl-offer label-light-success">20% Off</sub> -->
+                                            </h5>
+                                            <p><strong>Beds :</strong> {{r.number_of_beds}} - <strong>Rooms:</strong> {{ r.rooms_count }}</p>
+                                            <span>${{r.price}}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <a href="#" class="show-more-button" data-more-title="Show More" data-less-title="Show Less"><i class="fas fa-down-arrow"></i></a>
+                    </div>
+
+                    <div id="utf_listing_amenities" class="utf_listing_section">
+                        <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">Amenities</h3>
+                        <ul class="utf_listing_features checfkboxes margin-top-0">
+                            
+                            {% for h in hotel.hotel_features %}
+                            <li>
+                                
+                                {% if h.icon_type == "Bootstap Icons" %}
+                                <i class="bi bi-{{h.icon}}"></i> 
+                                {% endif %}
+
+                                {% if h.icon_type == "Fontawesome Icons" %}
+                                <i class="fas fa-{{h.icon}}"></i> 
+                                {% endif %}
+                                    
+                                {{h.name}}
+                            </li>
+                            {% endfor %}
+                            
+                        </ul>
+                    </div>
+
+                    <div id="utf_listing_faq" class="utf_listing_section">
+                        <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">FAQ's</h3>
+                        <div class="style-2">
+                            <div class="accordion">
+                                
+                                {% for h in hotel.hotel_faqs %}
+                                    <h3><span class="ui-accordion-header-icon ui-icon ui-accordion-icon"></span><i class="sl sl-icon-plus"></i> ({{forloop.counter}}) {{h.question}}</h3>
+                                    <div>
+                                        <p>{{h.answer}}</p>
+                                    </div>
+                                {% endfor %}
+
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div id="utf_listing_reviews" class="utf_listing_section">
+                        <h3 class="utf_listing_headline_part margin-top-75 margin-bottom-20">Reviews <span>({{all_reviews.count}})</span></h3>
+                        <div class="clearfix"></div>
+                        <div class="reviews-container">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div id="review_summary">
+                                        
+                                        {% if hotel.average_rating == None %}
+                                        <strong>Not Rated Yet</strong>
+                                        {% else %}
+                                        <strong>{{hotel.average_rating}}/5</strong>
+                                        {% endif %}
+                                            
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="comments utf_listing_reviews">
+                            <ul>
+                                
+                                {% for a in all_reviews %}
+                                    
+                                    
+                                <li>
+                                    <div class="avatar"><img src="{{ a.user.profile.image.url }}" alt="" /></div>
+                                    <div class="utf_comment_content">
+                                        <div class="utf_arrow_comment"></div>
+                                        <div class="utf_by_comment"><p>{{ a.user.profile.full_name }} - {{ a.rating }} <i class="fas fa-star text-warning"></i> </p>  <span class="date"><i class="fa fa-clock-o"></i> {{ a.date }}</span> </div>
+                                        <p>{{ a.review }}</p>
+                                    </div>
+                                </li>
+                                {% empty %}
+                                <li>
+                                    <div class="utf_comment_content">
+                                        <div class="utf_arrow_comment"></div>
+                                        <div class="utf_by_comment">No Reviews Yet</div>
+                                        
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4 col-md-4 margin-top-75 sidebar-search">
+                    <!-- <div class="verified-badge with-tip margin-bottom-30" data-tip-content="Purchase ticket has been verified and belongs business owner or manager."> <i class="fas fa-check-circle"></i> Now Available</div> -->
+                    <div class="utf_box_widget booking_widget_box">
+                        <h3><i class="fa fa-calendar"></i> Booking</h3>
+                        <form class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{hotel.id}}" name="hotel-id" id="">
+                            <div class="col-lg-12 col-md-12 select_date_box">
+                                <label for="">Check-in Date</label>
+                                <input type="date" id="date-picker" name="checkin" placeholder="Select Date">
+                            </div>
+                            <div class="col-lg-12 col-md-12 select_date_box">
+                                <label for="">Check-out Date</label>
+                                <input type="date" name="checkout" id="date-picker" placeholder="Select Date">
+                            </div>
+                            <div class="with-forms">
+                                <div class="col-lg-12 col-md-12">
+                                    <a href="#">Guests <span class="qtyTotal" name="qtyTotal">1</span></a>
+                                    <div class="panel-dropdown-content">
+                                        <div class="qtyButtons">
+                                            <div class="qtyTitle">Adults</div>
+                                            <input type="text" name="adult" value="1">
+                                        </div>
+                                        <div class="qtyButtons">
+                                            <div class="qtyTitle">Childrens</div>
+                                            <input type="text" name="children" value="1">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="with-forms margin-top-30">
+                                <div class="col-lg-12 col-md-12 ">
+                                    <a href="#">Select Room Type</a>
+                                    <select name="room-type" class="utf_chosen_select_single" required>
+                                        <option value="">Select Room</option>
+                                        {% for r in hotel.hotel_room_types %}
+                                            <option value="{{r.slug}}">{{r.type}}</option>
+                                        {% endfor %}
+                                      </select>
+                                </div>
+                            </div>
+                           
+                            <button type="submit" class="utf_progress_button button fullwidth_block margin-top-5">Check Availability</button>
+                        </form>
+                        <button class="like-button add_to_wishlist"><span class="like-icon"></span> Add to Wishlist</button>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="utf_box_widget margin-top-35">
+                        <h3><i class="fas fa-user"></i> Contact Info</h3>
+                        <div class="utf_hosted_by_user_title"> <a href="#" class="utf_hosted_by_avatar_listing"><img src="{{hotel.user.profile.image.url}}" style="object-fit: cover;" alt=""></a>
+                            <h4>
+                                <a href="#">{{hotel.user.profile.full_name}}</a>
+                                <span> @{{ hotel.user.username }}</span>
+                                <span> Posted on:08/05/2025</span>
+                            </h4>
+                        </div>
+                        <ul class="utf_social_icon rounded margin-top-10">
+                            <li><a class="facebook" href="{{hotel.user.profile.facebook}}"><i class="fab fa-facebook"></i></a></li>
+                            <li><a class="twitter" href="{{hotel.user.profile.twitter}}"><i class="fab fa-twitter"></i></a></li>
+                        </ul>
+                        <ul class="utf_listing_detail_sidebar">
+                            <li><i class="fas fa-location-arrow"></i>  {{hotel.user.profile.address}} {{hotel.user.profile.state}} {{hotel.user.profile.city}} {{hotel.user.profile.country}}</li>
+                            <li><i class="fas fa-phone"></i> {{hotel.user.profile.phone}}</li>
+                            <li><i class="fas fa-envelope-o"></i> <a href="mailto:{{hotel.user.email}}">{{hotel.user.email}}</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="utf_box_widget listing-share margin-top-35 margin-bottom-40 no-border">
+                        <h3><i class="fas fa-tag"></i> Bookmark Listing</h3>
+                        <span>{{all_reviews.count}} People Bookmarked This Hotel</span>
+                    </div>
+                    <div class="utf_box_widget opening-hours review-avg-wrapper margin-top-35">
+                        <h3><i class="fas fa-star"></i> Rating Average </h3>
+                        <div class="box-inner">
+                            <div class="rating-avg-wrapper text-theme clearfix">
+                                {% if hotel.average_rating == None %}
+                                <div class="utf_counter_star_rating">No Reviews Yet</div>
+
+                                {% else %}
+                                <div class="rating-avg">{{hotel.average_rating}}</div>
+                                <div class="rating-after">
+                                    <div class="rating-mode">/5 ({{hotel.rating_count}} Reviews)</div>
+                                    
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="ratings-avg-wrapper">
+                                <div class="ratings-avg-item">
+                                    <div class="rating-label">Quality</div>
+                                    <div class="rating-value text-theme">5.0</div>
+                                </div>
+                                <div class="ratings-avg-item">
+                                    <div class="rating-label">Location</div>
+                                    <div class="rating-value text-theme">4.5</div>
+                                </div>
+                                <div class="ratings-avg-item">
+                                    <div class="rating-label">Space</div>
+                                    <div class="rating-value text-theme">3.5</div>
+                                </div>
+                                <div class="ratings-avg-item">
+                                    <div class="rating-label">Service</div>
+                                    <div class="rating-value text-theme">4.0</div>
+                                </div>
+                                <div class="ratings-avg-item">
+                                    <div class="rating-label">Price</div>
+                                    <div class="rating-value text-theme">5.0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <section class="fullwidth_block padding-top-20 padding-bottom-50">
+            <div class="container">
+                <div class="row slick_carousel_slider">
+                    <div class="col-md-12">
+                        <h3 class="headline_part centered margin-bottom-25">Similar Listings</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="simple_slick_carousel_block utf_dots_nav">
+                                <div class="utf_carousel_item">
+                                    <a href="listings_single_page_1.html" class="utf_listing_item-container compact">
+                                        <div class="utf_listing_item"> <img src="images/utf_listing_item-01.jpg" alt=""> <span class="tag"><i class="im im-icon-Chef-Hat"></i> Restaurant</span> <span class="featured_tag">Featured</span>
+                                            <span class="utf_open_now">Open Now</span>
+                                            <div class="utf_listing_item_content">
+                                                <div class="utf_listing_prige_block">
+                                                    <span class="utf_meta_listing_price"><i class="fa fa-tag"></i> $25 - $55</span>
+                                                    <span class="utp_approve_item"><i class="utf_approve_listing"></i></span>
+                                                </div>
+                                                <h3>Chontaduro Barcelona</h3>
+                                                <span><i class="fa fa-map-marker"></i> The Ritz-Carlton, Hong Kong</span>
+                                                <span><i class="fa fa-phone"></i> (+15) 124-796-3633</span>
+                                            </div>
+                                        </div>
+                                        <div class="utf_star_rating_section" data-rating="4.5">
+                                            <div class="utf_counter_star_rating">(4.5)</div>
+                                            <span class="utf_view_count"><i class="fa fa-eye"></i> 822+</span>
+                                            <span class="like-icon"></span>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="utf_carousel_item">
+                                    <a href="listings_single_page_1.html" class="utf_listing_item-container compact">
+                                        <div class="utf_listing_item"> <img src="images/utf_listing_item-02.jpg" alt=""> <span class="tag"><i class="im im-icon-Electric-Guitar"></i> Events</span>
+                                            <div class="utf_listing_item_content">
+                                                <div class="utf_listing_prige_block">
+                                                    <span class="utf_meta_listing_price"><i class="fa fa-tag"></i> $45 - $70</span>
+                                                </div>
+                                                <h3>The Lounge & Bar</h3>
+                                                <span><i class="fa fa-map-marker"></i> The Ritz-Carlton, Hong Kong</span>
+                                                <span><i class="fa fa-phone"></i> (+15) 124-796-3633</span>
+                                            </div>
+                                        </div>
+                                        <div class="utf_star_rating_section" data-rating="4.5">
+                                            <div class="utf_counter_star_rating">(4.5)</div>
+                                            <span class="utf_view_count"><i class="fa fa-eye"></i> 822+</span>
+                                            <span class="like-icon"></span>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="utf_carousel_item">
+                                    <a href="listings_single_page_1.html" class="utf_listing_item-container compact">
+                                        <div class="utf_listing_item"> <img src="images/utf_listing_item-03.jpg" alt=""> <span class="tag"><i class="im im-icon-Hotel"></i> Hotels</span>
+                                            <span class="utf_closed">Closed</span>
+                                            <div class="utf_listing_item_content">
+                                                <div class="utf_listing_prige_block">
+                                                    <span class="utf_meta_listing_price"><i class="fa fa-tag"></i> $25 - $55</span>
+                                                </div>
+                                                <h3>Westfield Sydney</h3>
+                                                <span><i class="fa fa-map-marker"></i> The Ritz-Carlton, Hong Kong</span>
+                                                <span><i class="fa fa-phone"></i> (+15) 124-796-3633</span>
+                                            </div>
+                                        </div>
+                                        <div class="utf_star_rating_section" data-rating="4.5">
+                                            <div class="utf_counter_star_rating">(4.5)</div>
+                                            <span class="utf_view_count"><i class="fa fa-eye"></i> 822+</span>
+                                            <span class="like-icon"></span>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="utf_carousel_item">
+                                    <a href="listings_single_page_1.html" class="utf_listing_item-container compact">
+                                        <div class="utf_listing_item"> <img src="images/utf_listing_item-04.jpg" alt=""> <span class="tag"><i class="im im-icon-Dumbbell"></i> Fitness</span>
+                                            <div class="utf_listing_item_content">
+                                                <div class="utf_listing_prige_block">
+                                                    <span class="utf_meta_listing_price"><i class="fa fa-tag"></i> $45 - $70</span>
+                                                    <span class="utp_approve_item"><i class="utf_approve_listing"></i></span>
+                                                </div>
+                                                <h3>Ruby Beauty Center</h3>
+                                                <span><i class="fa fa-map-marker"></i> The Ritz-Carlton, Hong Kong</span>
+                                                <span><i class="fa fa-phone"></i> (+15) 124-796-3633</span>
+                                            </div>
+                                        </div>
+                                        <div class="utf_star_rating_section" data-rating="4.5">
+                                            <div class="utf_counter_star_rating">(4.5)</div>
+                                            <span class="utf_view_count"><i class="fa fa-eye"></i> 822+</span>
+                                            <span class="like-icon"></span>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="utf_carousel_item">
+                                    <a href="listings_single_page_1.html" class="utf_listing_item-container compact">
+                                        <div class="utf_listing_item"> <img src="images/utf_listing_item-05.jpg" alt=""> <span class="tag"><i class="im im-icon-Hotel"></i> Hotels</span> <span class="featured_tag">Featured</span>
+                                            <span class="utf_closed">Closed</span>
+                                            <div class="utf_listing_item_content">
+                                                <div class="utf_listing_prige_block">
+                                                    <span class="utf_meta_listing_price"><i class="fa fa-tag"></i> $45 - $70</span>
+                                                </div>
+                                                <h3>UK Fitness Club</h3>
+                                                <span><i class="fa fa-map-marker"></i> The Ritz-Carlton, Hong Kong</span>
+                                                <span><i class="fa fa-phone"></i> (+15) 124-796-3633</span>
+                                            </div>
+                                        </div>
+                                        <div class="utf_star_rating_section" data-rating="4.5">
+                                            <div class="utf_counter_star_rating">(4.5)</div>
+                                            <span class="utf_view_count"><i class="fa fa-eye"></i> 822+</span>
+                                            <span class="like-icon"></span>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="utf_carousel_item">
+                                    <a href="listings_single_page_1.html" class="utf_listing_item-container compact">
+                                        <div class="utf_listing_item"> <img src="images/utf_listing_item-06.jpg" alt=""> <span class="tag"><i class="im im-icon-Chef-Hat"></i> Restaurant</span>
+                                            <span class="utf_open_now">Open Now</span>
+                                            <div class="utf_listing_item_content">
+                                                <div class="utf_listing_prige_block">
+                                                    <span class="utf_meta_listing_price"><i class="fa fa-tag"></i> $25 - $45</span>
+                                                    <span class="utp_approve_item"><i class="utf_approve_listing"></i></span>
+                                                </div>
+                                                <h3>Fairmont Pacific Rim</h3>
+                                                <span><i class="fa fa-map-marker"></i> The Ritz-Carlton, Hong Kong</span>
+                                                <span><i class="fa fa-phone"></i> (+15) 124-796-3633</span>
+                                            </div>
+                                        </div>
+                                        <div class="utf_star_rating_section" data-rating="4.5">
+                                            <div class="utf_counter_star_rating">(4.5)</div>
+                                            <span class="utf_view_count"><i class="fa fa-eye"></i> 822+</span>
+                                            <span class="like-icon"></span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section> -->
+
+{% endblock content %}

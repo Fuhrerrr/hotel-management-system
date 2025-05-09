@@ -1,0 +1,98 @@
+
+{% extends 'partials/dashboard_base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Dashboard -->
+    <div id="dashboard">
+        <a href="#" class="utf_dashboard_nav_responsive"><i class="fa fa-reorder"></i> Dashboard Sidebar Menu</a>
+        {% include 'partials/dashboard_sidebar.html' %}
+        <div class="utf_dashboard_content">
+            
+            <div class="row">
+                <div class="col-lg-4 col-md-12 col-sm-12">
+                    <div class="utf_dashboard_stat color-1">
+                        <div class="utf_dashboard_stat_content">
+                            <h4>{{bookings.count}}</h4>
+                            <span>Total Paid Bookings</span>
+                        </div>
+                        <div class="utf_dashboard_stat_icon"><i class="fas fa-check"></i></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-12 col-sm-12">
+                    <div class="utf_dashboard_stat color-2">
+                        <div class="utf_dashboard_stat_content">
+                            <h4>${{total_spent.amount|floatformat:2}}</h4>
+                            <span>Total Spent</span>
+                        </div>
+                        <div class="utf_dashboard_stat_icon"><i class="fas fa-dollar"></i></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-12 col-sm-12">
+                    <div class="utf_dashboard_stat color-3">
+                        <div class="utf_dashboard_stat_content">
+                            <h4>${{request.user.profile.wallet|floatformat:2}}</h4>
+                            <span>Wallet Balance</span>
+                        </div>
+                        <div class="utf_dashboard_stat_icon"><i class="fas fa-wallet"></i></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 mb-4">
+                    <div class="utf_dashboard_list_box table-responsive recent_booking">
+                        <h4>Booking</h4>
+                        <div class="dashboard-list-box table-responsive invoices with-icons">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>S/N</th>
+                                        <th>Hotel Name</th>
+                                        <th>Total Rooms</th>
+                                        <th>Booking Date</th>
+                                        <th>Payment Status</th>
+                                        <th>View Booking</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    {% for b in bookings %}
+                                        <tr>
+                                            <td>1</td>
+                                            <td>{{ b.hotel.name }}</td>
+                                            <td>{{ b.room.all.count }}</td>
+                                            <td>{{b.date}}</td>
+                                            <td><span class="badge text-uppercase">{{ b.payment_status }}</span></td>
+                                            <td><a href="{% url 'dashboard:booking_detail' b.booking_id %}" class="button gray"><i class="fa fa-eye"></i> View</a></td>
+                                        </tr>
+                                    {% endfor %}
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="utf_dashboard_list_box invoices with-icons margin-top-20">
+                        <h4>All Booking Invoices</h4>
+                        <ul>
+                            
+                            {% for b in bookings %}
+                                <li><i class="fas fa-receipt"></i> <strong>{{b.hotel.name}} <span class="paid">{{b.payment_status|title}}</span></strong>
+                                    <ul>
+                                        <li><span>Order Number:-</span> {{b.booking_id}}</li>
+                                        <li><span>Date:-</span> {{b.date|date:"d M, Y"}}</li>
+                                    </ul>
+                                    <div class="buttons-to-right"> <a href="{% url 'hotel:invoice' b.booking_id %}" class="button gray"><i class="fas fa-arrow-right"></i> Invoice</a> </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

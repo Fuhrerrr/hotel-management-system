@@ -1,0 +1,57 @@
+
+{% extends 'partials/dashboard_base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Dashboard -->
+    <div id="dashboard">
+        <a href="#" class="utf_dashboard_nav_responsive"><i class="fa fa-reorder"></i> Dashboard Sidebar Menu</a>
+        {% include 'partials/dashboard_sidebar.html' %}
+        <div class="utf_dashboard_content">
+            
+            <div class="row">
+                
+
+                <div class="col-lg-6 col-md-12 col-sm-12">
+                    <div class="utf_dashboard_stat color-5">
+                        <div class="utf_dashboard_stat_content">
+                            <h4>${{total_spent.amount|floatformat:2}}</h4>
+                            <span>Total Spent</span>
+                        </div>
+                        <div class="utf_dashboard_stat_icon"><i class="fas fa-dollar"></i></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-12 col-sm-12">
+                    <div class="utf_dashboard_stat color-2">
+                        <div class="utf_dashboard_stat_content">
+                            <h4>${{request.user.profile.wallet|floatformat:2}}</h4>
+                            <span>Wallet Balance</span>
+                        </div>
+                        <div class="utf_dashboard_stat_icon"><i class="fas fa-wallet"></i></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="utf_dashboard_list_box invoices with-icons margin-top-20">
+                        <h4>Spending History</h4>
+                        <ul>
+                            
+                            {% for b in bookings %}
+                                <li><i class="fas fa-receipt"></i> <strong>{{b.hotel.name}} <span class="paid">{{b.payment_status|title}} ${{ b.total|floatformat:2 }}</span></strong>
+                                    <ul>
+                                        <li><span>Order Number: </span> {{b.booking_id}}</li>
+                                        <li><span>Date: </span> {{b.date|date:"d M, Y"}}</li>
+                                        <li><span>Spent: </span> ${{ b.total|floatformat:2 }}</li>
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,52 @@
+
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+<div class="fullwidth_block search_categorie_block">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="headline_part centered margin-top-75 margin-bottom-45">Sign Up <span>Hi there! Create a free account today.</span> </h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="category_container_item_part card">
+                        <div class="utf_signin_form style_one">
+                            <ul class="utf_tabs_nav">
+                                <!-- <li class=""><a href="#tab1">Log In</a></li> -->
+                            </ul>
+                            <div class="tab_container alt">
+                                
+
+                                <div class="tab_content" id="tab2" style="display:none;">
+                                    <form method="post" class="register">
+                                        {% csrf_token %}
+                                        {{form}}
+                                        <input type="submit" class="button border fw margin-top-10" name="register" value="Register" />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="category_container_item_part">
+                        <a href="#" class="category_fitem_box"> 
+                            <img src="https://img.freepik.com/free-vector/tablet-login-concept-illustration_114360-7963.jpg?w=2000" style="width: 100%; height: 420px; object-fit: cover;" alt=""/>
+                           
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+    

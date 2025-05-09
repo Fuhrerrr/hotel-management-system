@@ -1,0 +1,88 @@
+
+{% extends 'partials/dashboard_base.html' %}
+{% load static %}
+{% block content %}
+
+    <div id="dashboard">
+        <a href="#" class="utf_dashboard_nav_responsive"><i class="fa fa-reorder"></i> Dashboard Sidebar Menu</a>
+        {% include 'partials/dashboard_sidebar.html' %}
+        <div class="utf_dashboard_content">
+            <div class="row"> 
+                <div class="col-lg-12 col-md-12">
+                  <div class="utf_dashboard_list_box margin-top-0">
+                    <h4 class="gray"><i class="fas fa-user"></i> Profile Details</h4>
+                    <div class="utf_dashboard_list_box-static"> 
+                      
+                      <div class="my-profile">
+                        {{u_form.errors}}
+                        {{p_form.errors}}
+                        <form class="row with-forms" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <div class="col-md-12">
+                                <div class="edit-profile-photo"> 
+                                    <img id="profile_image_preview" src="{{request.user.profile.image.url}}" style="width: 200px; height: 200px; object-fit: cover;" alt="">
+                                    <div class="photoUpload"> 
+                                        <span><i class="fa fa-upload"></i> Upload Photo</span>
+                                        {{p_form.image}}
+                                      </div>
+                                  </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label>Full Name</label>	
+                                {{p_form.full_name}}					
+                            </div>
+
+                            <div class="col-md-6">
+                                <label>Email</label>	
+                                {{u_form.email}}					
+                            </div>
+                            <div class="col-md-4">
+                                <label>Mobile</label>	
+                                {{p_form.phone}}					
+                            </div>
+                            <div class="col-md-4">
+                                <label>Gender</label>	
+                                {{p_form.gender}}					
+                            </div>
+                            <div class="col-md-4">
+                                <label>Country</label>	
+                                {{p_form.country}}					
+                            </div>
+                            <div class="col-md-4">
+                                <label>State</label>	
+                                {{p_form.state}}					
+                            </div>
+                            <div class="col-md-4">
+                                <label>City</label>	
+                                {{p_form.city}}					
+                            </div>
+                            <div class="col-md-4">
+                                <label>Address</label>	
+                                {{p_form.address}}					
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <button class="button preview btn_center_item margin-top-15" type="submit">Save Changes</button>
+                            </div>
+                          </form>	
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Show Image Preview Before Upload 
+        var loadFile = function (event) {
+          var output2 = document.getElementById("profile_image_preview");
+          output2.src = URL.createObjectURL(event.target.files[0]);
+          output2.onload = function () {
+            URL.revokeObjectURL(output2.src); // free memory :) hehe
+          };
+        };
+      </script>
+{% endblock content %}

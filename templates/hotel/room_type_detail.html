@@ -1,0 +1,129 @@
+
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+  
+  <div id="titlebar" class="gradient">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>{{room_type.type}} Room</h2>
+          <nav id="breadcrumbs">
+            <ul>
+              <li><p>{{rooms.count}} Available Rooms</p></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <section class="fullwidth_block margin-top-0 padding-top-0 padding-bottom-50" data-background-color="#fff"> 
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h3 class="headline_part centered margin-bottom-20">All Available Rooms<span>The {{ room_type.type }} room has {{ rooms.count }} available room(s)</span></h3>
+        </div>
+      </div>
+      <div class="row">  
+        <div class="col-lg-8 "> 
+          
+          {% for r in rooms %}
+              <div class="plan featured col-md-4 col-sm-6 col-xs-12">
+              <div class="utf_price_plan">
+                  <h3>Room No. {{ r.room_number }}</h3>
+                  <span class="value">${{r.room_type.price}}<span>/Per Night</span></span> 
+              </div>
+              <div class="utf_price_plan_features">
+                  <ul>
+                  <li>Beds: {{r.room_type.number_of_beds}} </li>
+                  <li>Room Capacity: {{r.room_type.room_capacity}}</li>
+                  </ul>
+                  <input type="hidden" class="room_id_{{r.id}}" value="{{r.id}}" id="room_id">
+                  <input type="hidden" class="room_number_{{r.id}}" value="{{r.room_number}}" id="room_number">
+                  <button class="button border add-to-selection" data-index="{{r.id}}"><i class="fas fa-shopping-cart"></i> Add To Selection</button> 
+              </div>
+              </div>
+          {% endfor %}
+          <input type="hidden" value="{{hotel.id}}" id="id">
+          <input type="hidden" value="{{hotel.name}}" id="hotel_name">
+          <input type="hidden" value="{{room_type.type}}" id="room_name">
+          <input type="hidden" value="{{room_type.price}}" id="room_price">
+          <input type="hidden" value="{{room_type.number_of_beds}}" id="number_of_beds">
+          <input type="hidden" value="{{room_type.id}}" id="room_type">
+          <input type="hidden" value="{{checkin}}" id="checkin">
+          <input type="hidden" value="{{checkout}}" id="checkout">
+          <input type="hidden" value="{{adult}}" id="adult">
+          <input type="hidden" value="{{children}}" id="children">
+
+          
+        </div>  
+        <div class="col-lg-4">
+            <div class=" booking_widget_box" style="border: 1px dashed rgba(42, 1, 119, 0.61); padding: 14px; border-radius: 10px;">
+              <h3><i class="fa fa-calendar"></i> Booking</h3>
+              <form class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}">
+                  {% csrf_token %}
+                  <input type="hidden" value="{{hotel.id}}" name="hotel-id" id="">
+                  <div class="col-lg-12 col-md-12 select_date_box">
+                      <label for="">Check-in Date</label>
+                      <input type="date" id="date-picker" value="{{checkin}}" name="checkin" placeholder="Select Date">
+                  </div>
+                  <div class="col-lg-12 col-md-12 select_date_box">
+                      <label for="">Check-out Date</label>
+                      <input type="date" class="checkout_date" name="checkout" value="{{checkout}}"  placeholder="Select Date">
+                  </div>
+                  <div class="with-forms">
+                      <div class="col-lg-12 col-md-12">
+                          <a href="#">Guests <span class="qtyTotal" name="qtyTotal">1</span></a>
+                          <div class="panel-dropdown-content">
+                              <div class="qtyButtons">
+                                  <div class="qtyTitle">Adults</div>
+                                  <input type="text" name="adult" {% if adult == None %}value="1"{% else %}value="{{adult}}"{% endif %}>
+                              </div>
+                              <div class="qtyButtons">
+                                  <div class="qtyTitle">Childrens</div>
+                                  <input type="text" name="children" {% if children == None %}value="1"{% else %}value="{{children}}"{% endif %}>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="with-forms margin-top-30">
+                      <div class="col-lg-12 col-md-12 ">
+                          <a href="#">Select Room Type</a>
+                          <select name="room-type" class="utf_chosen_select_single" required>
+                              <!-- <option value="{{room_type|lower}}">{{room_type}}</option> -->
+                              <option value="{{room_type|lower}}">{{room_type}}</option>
+
+                              {% for r in hotel.hotel_room_types %}
+                                  <option value="{{r.slug}}">{{r.type}}</option>
+                              {% endfor %}
+                            </select>
+                      </div>
+                  </div>
+                
+                  <button type="submit" class="utf_progress_button button fullwidth_block margin-top-5">Check Availability</button>
+              </form>
+              <button class="like-button add_to_wishlist"><span class="like-icon"></span> Add to Wishlist</button>
+              <div class="clearfix"></div>
+            </div>
+        </div>      
+              
+      </div>      
+    </div>    
+  </section>
+
+  <script>
+    $(document).ready(function(){
+        
+        var dateInput = $('#checkout_date');
+
+        dateInput.on('change', function() {
+            var selectedDate = dateInput.val();
+            console.log('Selected date:', selectedDate);
+        });
+    })
+  </script>
+  
+{% endblock content %}

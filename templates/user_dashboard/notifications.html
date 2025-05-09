@@ -1,0 +1,50 @@
+
+{% extends 'partials/dashboard_base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Dashboard -->
+    <div id="dashboard">
+        <a href="#" class="utf_dashboard_nav_responsive"><i class="fa fa-reorder"></i> Dashboard Sidebar Menu</a>
+        {% include 'partials/dashboard_sidebar.html' %}
+        <div class="utf_dashboard_content ">
+            
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="utf_dashboard_list_box with-icons margin-top-20 noti-div-main">
+                        <div class="sort-by my_sort_by">
+                            <div class="utf_sort_by_select_item">
+                              <select id="noti-status" data-placeholder="All Listing" class="utf_chosen_select_single">
+                                <option value="all">All Notifications</option>
+                                <option value="read">Read Notifications</option>
+                                <option value="unread">Unread Notifications</option>
+                                
+                              </select>
+                            </div>
+                        </div>
+                        <h4 class="noti-text">Notifications</h4>
+                        
+                        <ul class="">
+                            
+                            {% for n in notifications %}
+                                <li class="noti-div-{{n.id}}">
+                                    {% if n.type == "Booking Confirmed" %}
+                                         Your booking (#{{n.booking.booking_id}}) has been placed successfully. <a href="#" data-index="{{n.id}}"  id=""  class=" noti-{{n.id}} close-list-item mark-noti-as-seen"><i class="fa fa-close"></i></a>
+                                    {% endif %}
+
+                                    {% if n.type == "Booking Cancelled" %}
+                                         Your booking (#{{n.booking.booking_id}}) has been cancelled. <a href="#"  data-index="{{n.id}}" id=""  class=" noti-{{n.id}} close-list-item mark-noti-as-seen"><i class="fa fa-close"></i></a>
+                                    {% endif %}
+                                </li>
+                                {% empty %}
+                                        <li>
+                                            <h6>No Notifications Yet</h6>
+                                        </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

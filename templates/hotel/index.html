@@ -1,0 +1,403 @@
+
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+        <!-- Banner -->
+        <div class="search_container_block main_search_block" data-background-image="{% static 'images/home_section_1.jpg' %}">
+            <div class="main_inner_search_block">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>Book Unique Experiences</h2>
+                            <h4>Discover top rated hotels, shops and restaurants in Morocco</h4>
+                            <div class="main_input_search_part">
+                                <div class="main_input_search_part_item">
+                                    <input type="text" placeholder="Hotel, City..." value="" />
+                                </div>
+                                <div class="main_input_search_part_item main-search-input-item search-input-icon">
+                                    <input type="text" placeholder="Select Booking Date" id="booking-date-search">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <div class="main_input_search_part_item intro-search-field">
+                                    <select data-placeholder="All Categories" class="selectpicker default" title="All Categories" data-live-search="true" data-selected-text-format="count" data-size="5">
+							  <option>Food & Restaurants </option>
+							  <option>Shop & Education</option>
+							  <option>Education</option>
+							  <option>Business</option>
+							  <option>Events</option>
+							</select>
+                                </div>
+                                <button class="button" >Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="fullwidth_block margin-top-65 padding-top-75 padding-bottom-70" data-background-color="#f9f9f9">
+            <div class="container">
+                <div class="row slick_carousel_slider">
+                    <div class="col-md-12">
+                        <h3 class="headline_part centered margin-bottom-45">Our Popular Tours <span>Explore the greates places in the city</span> </h3>
+                    </div>
+
+                    <div class="row">
+                       
+                                {% for h in hotel %}
+                                    <div class="col-lg-4">
+                                        <a href="{% url 'hotel:detail' h.slug %}" class="utf_listing_item-container compact">
+                                            <div class="utf_listing_item"> <img src="{{h.image.url}}" alt=""> 
+                                                <!-- <span class="tag"> <i class="im im-icon-Chef-Hat"></i> Restaurant </span>  -->
+                                                <!-- <span class="featured_tag">Featured</span> -->
+                                                <span class="utf_open_now">Open Now</span>
+                                                <div class="utf_listing_item_content">
+                                                    <div class="utf_listing_prige_block">
+                                                        <!-- <span class="utf_meta_listing_price"><i class="fa fa-tag"></i> $25 - $55</span> -->
+                                                        <!-- <span class="utp_approve_item"><i class="utf_approve_listing"></i></span> -->
+                                                    </div>
+                                                    <h3>{{h.name|truncatechars:20}}</h3>
+                                                    <span><i class="fas fa-location-arrow"></i> {{h.address}}</span>
+                                                    <span><i class="fas fa-phone"></i> {{h.mobile}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="utf_star_rating_section" data-rating="{{h.average_rating}}">
+                                                
+                                                {% if h.average_rating == None %}
+                                                <div class="utf_counter_star_rating">No Rating Yet</div>
+                                                {% else %}
+                                                <div class="utf_counter_star_rating">{{h.average_rating}}/5 ({{h.rating_count}} reviews) </div>
+                                                {% endif %}
+                                                    
+                                                <span class="utf_view_count"> {{h.views}}</span>
+                                                <span class="like-icon add-to-bookmark-{{h.id}}" data-hotel="{{h.id}}" id="add-to-bookmark"></span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+
+                               
+                            
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="fullwidth_block search_categorie_block">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="headline_part centered margin-top-75 margin-bottom-45">Top Featured Locations <span>What do you want to do today</span> </h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="category_container_item_part">
+                                <a href="#" class="category_item_box">
+                                    <div class="featured-type featured">
+                                        Top <br>Featured
+                                    </div>
+                                    <img src="{% static 'images/category-box-01.jpg' %}" alt="" />
+                                    <span class="category_item_box_btn">Browse</span>
+                                    <div class="category_content_box_part">
+                                        <h3>Ouarzzazat</h3>
+                                        <span>15 listings</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="category_container_item_part">
+                                <a href="#" class="category_item_box"> 
+					<img src="{% static 'images/category-box-02.jpg' %}" alt=""/>
+					 <span class="category_item_box_btn">Browse</span>
+					  <div class="category_content_box_part">
+						<h3>Marrakech</h3>
+						<span>27 Listings</span> 
+					  </div>
+					</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="category_container_item_part">
+                                <a href="#" class="category_item_box"> 
+					  <img src="{% static 'images/category-box-03.jpg' %}" alt=""/>
+					  <span class="category_item_box_btn">Browse</span>
+						<div class="category_content_box_part">
+						  <h3>Agadir</h3>
+						  <span>22 Listings</span> 
+						</div>
+					</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="category_container_item_part">
+                                <a href="#" class="category_item_box"> 
+					 <img src="{% static 'images/category-box-04.jpg' %}" alt=""/> 
+					 <span class="category_item_box_btn">Browse</span>
+					  <div class="category_content_box_part">
+						<h3>Fes</h3>
+						<span>15 Listings</span> 
+					  </div>
+					</a>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="category_container_item_part">
+                                <a href="#" class="category_item_box">
+                                    <div class="featured-type featured">
+                                        Top <br>Rated City
+                                    </div>
+                                    <img src="{% static 'images/category-box-05.jpg' %}" alt="" />
+                                    <span class="category_item_box_btn">Browse</span>
+                                    <div class="category_content_box_part">
+                                        <h3>Tangier</h3>
+                                        <span>26 Listings</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="category_container_item_part">
+                                <a href="#" class="category_item_box"> 
+					<img src="{% static 'images/category-box-06.jpg' %}" alt=""/>
+					 <span class="category_item_box_btn">Browse</span>
+					  <div class="category_content_box_part">
+						<h3>Hussima</h3>
+						<span>27 Listings</span> 
+					  </div>
+					</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+
+       
+
+        <section class="fullwidth_block padding-bottom-75">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <h2 class="headline_part centered margin-top-80">How It Works? <span class="margin-top-10">Discover & connect with great local businesses</span> </h2>
+                    </div>
+                </div>
+                <div class="row container_icon">
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="box_icon_two box_icon_with_line"> <i class="im im-icon-Map-Marker2"></i>
+                            <h3>Find Interesting Place</h3>
+                            <p>Browse our curated list of the best hotels and hidden gems across Morocco.
+                                Discover places that match your taste, needs, and budget.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="box_icon_two box_icon_with_line"> <i class="im im-icon-Mail-Add"></i>
+                            <h3>Contact a Few Owners</h3>
+                            <p>Easily reach out to verified hotel owners or hosts.
+                                Ask questions, check availability, and get personalized offers..</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="box_icon_two"> <i class="im im-icon-Administrator"></i>
+                            <h3>Make a Reservation</h3>
+                            <p>Book your favorite stay securely in just a few clicks.
+                                Enjoy a smooth experience from planning to arrival.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="utf_testimonial_part fullwidth_block padding-top-75 padding-bottom-75">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <h3 class="headline_part centered"> What Say Our Customers <span class="margin-top-15">Here’s what our customers are saying about their experience with us.
+                            We value every opinion and strive to make every stay unforgettable.</span> </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="fullwidth_carousel_container_block margin-top-20">
+                <div class="utf_testimonial_carousel testimonials">
+                    <div class="utf_carousel_review_part">
+                        <div class="utf_testimonial_box">
+                            <div class="testimonial">As a Moroccan, I was proud to experience such high-quality service right here in my own country. The hospitality was exceptional, the food was delicious, and the atmosphere felt both luxurious and familiar. I will definitely come back with my family!"</div>
+                        </div>
+                        <div class="utf_testimonial_author"> <img src="{% static 'images/happy-client-01.jpg' %}" alt="">
+                            <h4>abdessalam tahiri <span>From Agadir</span></h4>
+                        </div>
+                    </div>
+                    <div class="utf_carousel_review_part">
+                        <div class="utf_testimonial_box">
+                            <div class="testimonial">I had a wonderful stay! The staff was incredibly kind and attentive to every detail. As a woman traveling with friends, I felt safe, relaxed, and pampered. The spa was amazing, and the view from our room was just perfect.</div>
+                        </div>
+                        <div class="utf_testimonial_author"> <img src="{% static 'images/happy-client-02.jpg' %}" alt="">
+                            <h4>Fatima Najjati <span>From Rabat</span></h4>
+                        </div>
+                    </div>
+                    <div class="utf_carousel_review_part">
+                        <div class="utf_testimonial_box">
+                            <div class="testimonial">"Coming back to Morocco for vacation, I wanted something that mixed tradition and comfort — and this hotel delivered exactly that. It felt like home with a touch of elegance. The service reminded me why Moroccan hospitality is so special."</div>
+                        </div>
+                        <div class="utf_testimonial_author"> <img src="{% static 'images/happy-client-03.jpg' %}" alt="">
+                            <h4>Houssine bouamer  <span>From Nador </span></h4>
+                        </div>
+                    </div>
+                    <div class="utf_carousel_review_part">
+                        <div class="utf_testimonial_box">
+                            <div class="testimonial">"I live in Belgium now, but every time I return to Morocco, I look for places that reflect our culture with modern comfort. This hotel exceeded my expectations — clean rooms, amazing staff, and that unique Moroccan warmth you can't find anywhere else."</div>
+                        </div>
+                        <div class="utf_testimonial_author"> <img src="{% static 'images/happy-client-01.jpg' %}" alt="">
+                            <h4>ilyas ait maina <span>from Beligium</span></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="fullwidth_block padding-top-75 padding-bottom-75" data-background-color="#ffffff">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="headline_part centered margin-bottom-50"> Latest Tips & Blog<span>Discover & connect with top-rated local businesses</span></h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <a href="#" class="blog_compact_part-container">
+                            <div class="blog_compact_part"> <img src="{% static 'images/blog-compact-post-01.jpg' %}" alt="">
+                                <div class="blog_compact_part_content">
+                                    <h3>Top Rooftop Cafés in Marrakech</h3>
+                                    <ul class="blog_post_tag_part">
+                                        <li>22 Avril 2025</li>
+                                    </ul>
+                                    <p>Discover the most stunning rooftop spots in the Red City to enjoy mint tea and sunsets over the medina.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <a href="#" class="blog_compact_part-container">
+                            <div class="blog_compact_part"> <img src="{% static 'images/blog-compact-post-02.jpg' %}" alt="">
+                                <div class="blog_compact_part_content">
+                                    <h3>Best Beachfront Restaurants in Agadir</h3>
+                                    <ul class="blog_post_tag_part">
+                                        <li>18 Avril 2025</li>
+                                    </ul>
+                                    <p>Taste the freshest seafood and local flavors right by the ocean in Morocco’s sunniest coastal city.
+
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <a href="#" class="blog_compact_part-container">
+                            <div class="blog_compact_part"> <img src="{% static 'images/blog-compact-post-03.jpg' %}" alt="">
+                                <div class="blog_compact_part_content">
+                                    <h3>Wellness Retreats in the Atlas Mountains</h3>
+                                    <ul class="blog_post_tag_part">
+                                        <li>10 January 2025</li>
+                                    </ul>
+                                    <p>Escape to the calm of the High Atlas and recharge with yoga, hammams, and breathtaking views.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <a href="#" class="blog_compact_part-container">
+                            <div class="blog_compact_part"> <img src="{% static 'images/blog-compact-post-04.jpg' %}" alt="">
+                                <div class="blog_compact_part_content">
+                                    <h3> Top Artisan Markets in Fès</h3>
+                                    <ul class="blog_post_tag_part">
+                                        <li>18 mars 2025</li>
+                                    </ul>
+                                    <p>Wander through vibrant souks and discover handmade treasures from Morocco’s cultural capital.
+
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-12 centered_content"> <a href="#" class="button border margin-top-20">View More Blog</a> </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="fullwidth_block margin-bottom-0 padding-top-50 padding-bottom-50" data-background-color="linear-gradient(to bottom, #f9f9f9 0%, rgba(255, 255, 255, 1))">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="companie-logo-slick-carousel utf_dots_nav">
+                            <div class="item">
+                                <img src="{% static 'images/brand_logo_01.png' %}" alt="">
+                            </div>
+                            <div class="item">
+                                <img src="{% static 'images/brand_logo_02.png' %}" alt="">
+                            </div>
+                            <div class="item">
+                                <img src="{% static 'images/brand_logo_03.png' %}" alt="">
+                            </div>
+                            <div class="item">
+                                <img src="{% static 'images/brand_logo_04.png' %}" alt="">
+                            </div>
+                            <div class="item">
+                                <img src="{% static 'images/brand_logo_05.png' %}" alt="">
+                            </div>
+                            <div class="item">
+                                <img src="{% static 'images/brand_logo_06.png' %}" alt="">
+                            </div>
+                            <div class="item">
+                                <img src="{% static 'images/brand_logo_07.png' %}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="utf_cta_area_item utf_cta_area2_block">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="utf_subscribe_block clearfix">
+                            <div class="col-md-8 col-sm-7">
+                                <div class="section-heading">
+                                    <h2 class="utf_sec_title_item utf_sec_title_item2">Subscribe to Newsletter!</h2>
+                                    <p class="utf_sec_meta">
+                                        Subscribe to get latest updates and information.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-5">
+                                <div class="contact-form-action">
+                                    <form method="post">
+                                        <span class="la la-envelope-o"></span>
+                                        <input class="form-control" type="email" placeholder="Enter your email" required="">
+                                        <button class="utf_theme_btn" type="submit">Subscribe</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock content %}
+     

@@ -1,0 +1,91 @@
+
+{% extends 'partials/dashboard_base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Dashboard -->
+    <div id="dashboard">
+        <a href="#" class="utf_dashboard_nav_responsive"><i class="fa fa-reorder"></i> Dashboard Sidebar Menu</a>
+        {% include 'partials/dashboard_sidebar.html' %}
+        <div class="utf_dashboard_content">
+            
+           
+            <div class="row"> 
+                <div class="col-lg-12 col-md-12">
+                  <div class="utf_dashboard_list_box margin-top-0">
+                    <div class="sort-by my_sort_by">
+                        <div class="utf_sort_by_select_item">
+                          <select data-placeholder="All Listing" class="utf_chosen_select_single">
+                            <option>All Orders</option>
+                            <option>Paid Orders</option>
+                            <option>UPaid Orders</option>
+                            
+                          </select>
+                        </div>
+                    </div>
+                    <h4>All Bookings</h4>
+                    <ul>
+                        
+                        {% for b in bookings %}
+                            <li class="utf_approved_booking_listing">
+                                <div class="utf_list_box_listing_item bookings">
+                                <div class="utf_list_box_listing_item_content">
+                                    <div class="inner">
+                                    <h3>{{b.full_name|title}} <span class="utf_booking_listing_status">{{b.payment_status|title}}</span></h3>
+                                    <div class="utf_inner_booking_listing_list">
+                                        <h5>Booking Item: </h5>
+                                        <ul class="utf_booking_listing_list">
+                                        <li>{{b.hotel.name}}</li>						  						  
+                                        </ul>
+                                    </div>
+                                    <div class="utf_inner_booking_listing_list">
+                                        <h5>Checkin Date:</h5>
+                                        <ul class="utf_booking_listing_list">
+                                          <li class="highlighted">{{b.check_in_date}}</li>
+                                        </ul>
+                                      </div>
+                                      <div class="utf_inner_booking_listing_list">
+                                        <h5>Checkout Date:</h5>
+                                        <ul class="utf_booking_listing_list">
+                                          <li class="highlighted">{{b.check_out_date}}</li>
+                                        </ul>
+                                      </div>
+                                      <div class="utf_inner_booking_listing_list">
+                                        <h5>Total Days:</h5>
+                                        <ul class="utf_booking_listing_list">
+                                          <li class="highlighted">{{ b.total_days }} Days</li>
+                                        </ul>
+                                      </div>
+                                      <div class="utf_inner_booking_listing_list">
+                                        <h5>Adults:</h5>
+                                        <ul class="utf_booking_listing_list">
+                                          <li class="highlighted">{{ b.num_adults }} Adults</li>
+                                        </ul>
+                                      </div>
+                                      <div class="utf_inner_booking_listing_list">
+                                        <h5>Children:</h5>
+                                        <ul class="utf_booking_listing_list">
+                                          <li class="highlighted">{{ b.num_children }} Adults</li>
+                                        </ul>
+                                      </div>
+                                   
+                                    <div class="utf_inner_booking_listing_list">
+                                        <h5>Price:</h5>
+                                        <ul class="utf_booking_listing_list">
+                                            <li class="highlighted">${{b.total|floatformat:2}}</li>
+                                        </ul>
+                                    </div>					  					  
+                                    </div>
+                                </div>
+                                </div>
+                                <div class=""> <a href="{% url 'dashboard:booking_detail' b.booking_id %}" class="button gray reject"><i class="fas fa-eye"></i> View Booking Detail</a> </div>
+                            </li>
+                        {% endfor %}
+                      
+                    </ul>
+                  </div>		  
+                </div>
+              </div>
+        </div>
+    </div>
+{% endblock content %}
