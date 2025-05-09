@@ -445,5 +445,6 @@ CKEDITOR_5_CONFIGS = {
     },
 }
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+WHITENOISE_SKIP_SOURCE_MAPS = True
 
 
